@@ -1,6 +1,6 @@
 <?php
 
-namespace Person;
+namespace Blog\Defox\Person;
 
 class Name
 {

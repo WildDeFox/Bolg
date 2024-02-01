@@ -1,6 +1,7 @@
 <?php
+namespace Blog\Defox\Blog;
 
-use Person\Name;
+use Blog\Defox\Person\Name;
 
 class User
 {

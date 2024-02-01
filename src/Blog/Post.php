@@ -1,5 +1,5 @@
 <?php
-
+namespace Blog\Defox\Blog;
 class Post
 {
     public function __construct(

@@ -1,4 +1,5 @@
 <?php
+namespace Blog\Defox\Blog;
 
 class Comment
 {

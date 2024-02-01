@@ -1,0 +1,14 @@
+{
+    "name": "blog/defox",
+    "autoload": {
+        "psr-4": {
+            "Blog\\Defox\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "yes"
+        }
+    ],
+    "require": {}
+}
