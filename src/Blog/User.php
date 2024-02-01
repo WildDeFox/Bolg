@@ -32,9 +32,5 @@ class User
         $this->name = $name;
     }
 
-    public function __toString(): string
-    {
-        return "Пользователь - $this->name, c ID - $this->id";
-    }
 
 }

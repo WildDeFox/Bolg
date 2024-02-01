@@ -44,6 +44,6 @@ class Name
 
     public function __toString(): string
     {
-        return $this->firstName . ' ' . $this->lastName . ' ' . $this->patronymic . PHP_EOL;
+        return $this->firstName . ' ' . $this->lastName . ' ' . $this->patronymic;
     }
 }

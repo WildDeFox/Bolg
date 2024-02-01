@@ -16,14 +16,14 @@ class Post
         return $this->id;
     }
 
+    public function getUserId():int
+    {
+        return $this->userId->getId();
+    }
+
     public function setId(int $id): void
     {
         $this->id = $id;
-    }
-
-    public function getUserId(): int
-    {
-        return $this->userId->getId();
     }
 
     public function getTitle(): string

@@ -7,7 +7,7 @@ class Comment
         private int           $id,
         private readonly User $userId,
         private readonly Post $postId,
-        private string        $post
+        private string        $text,
     )
     {
     }
@@ -32,13 +32,13 @@ class Comment
         return $this->postId->getId();
     }
 
-    public function getPost(): string
+    public function getText(): string
     {
-        return $this->post;
+        return $this->text;
     }
 
-    public function setPost(string $post): void
+    public function setText ($text): void
     {
-        $this->post = $post;
+        $this->text = $text;
     }
 }
