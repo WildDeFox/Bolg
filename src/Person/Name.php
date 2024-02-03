@@ -7,7 +7,6 @@ class Name
     public function __construct(
         private string $firstName,
         private string $lastName,
-        private string $patronymic,
     )
     {
     }
@@ -32,18 +31,10 @@ class Name
         $this->lastName = $lastName;
     }
 
-    public function getPatronymic(): string
-    {
-        return $this->patronymic;
-    }
 
-    public function setPatronymic(string $patronymic): void
-    {
-        $this->patronymic = $patronymic;
-    }
 
     public function __toString(): string
     {
-        return $this->firstName . ' ' . $this->lastName . ' ' . $this->patronymic;
+        return $this->firstName . ' ' . $this->lastName;
     }
 }
