@@ -12,6 +12,7 @@
     ],
     "require": {
         "fakerphp/faker": "^1.23",
-        "symfony/polyfill-uuid": "^1.28"
+        "symfony/polyfill-uuid": "^1.28",
+        "ext-pdo": "*"
     }
 }

@@ -37,6 +37,9 @@ class User
     {
         $this->name = $name;
     }
-
+    public function __toString(): string
+    {
+        return "Пользователь: $this->name, c UUID: $this->uuid и логином $this->username";
+    }
 
 }
