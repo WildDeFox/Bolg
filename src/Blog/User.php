@@ -6,23 +6,29 @@ use Blog\Defox\Person\Name;
 class User
 {
     public function __construct(
-        private int $id,
-        private Name $name,
+        private readonly UUID $uuid,
+        private Name          $name,
+        private string        $username,
     )
     {
     }
 
-    public function getId(): int
+    public function getUsername(): string
     {
-        return $this->id;
+        return $this->username;
     }
 
-    public function setId(int $id): void
+    public function setUsername(string $username): void
     {
-        $this->id = $id;
+        $this->username = $username;
     }
 
-    public function getName(): Name
+    public function uuid(): UUID
+    {
+        return $this->uuid;
+    }
+
+    public function name(): Name
     {
         return $this->name;
     }
