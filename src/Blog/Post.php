@@ -4,7 +4,7 @@ class Post
 {
     public function __construct(
         private UUID $uuid,
-        private UUID $userId,
+        private User $user,
         private string        $title,
         private string        $text,
     )
@@ -16,9 +16,9 @@ class Post
         return $this->uuid;
     }
 
-    public function getUserId(): UUID
+    public function getUser(): User
     {
-        return $this->userId;
+        return $this->user;
     }
 
     public function getTitle(): string

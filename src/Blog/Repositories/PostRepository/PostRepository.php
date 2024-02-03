@@ -4,11 +4,14 @@ namespace Blog\Defox\Blog\Repositories\PostRepository;
 
 use Blog\Defox\Blog\Exceptions\InvalidArgumentException;
 use Blog\Defox\Blog\Exceptions\PostNotFoundException;
+use Blog\Defox\Blog\Exceptions\UserNotFoundException;
 use Blog\Defox\Blog\Post;
+use Blog\Defox\Blog\Repositories\UserRepository\SqliteUsersRepository;
 use Blog\Defox\Blog\UUID;
 use PDO;
+use PDOStatement;
 
-class PostRepository implements PostRepositoryInterface
+readonly class PostRepository implements PostRepositoryInterface
 {
     public function __construct(
         private PDO $connect
@@ -24,7 +27,7 @@ class PostRepository implements PostRepositoryInterface
         );
         $statement->execute([
             ':uuid' => $post->uuid(),
-            ':user_uuid' => $post->getUserId(),
+            ':user_uuid' => $post->getUser()->uuid(),
             ':title' => $post->getTitle(),
             ':text' => $post->getText(),
         ]);
@@ -32,6 +35,7 @@ class PostRepository implements PostRepositoryInterface
 
     /**
      * @throws PostNotFoundException|InvalidArgumentException
+     * @throws UserNotFoundException
      */
     public function get(UUID $uuid): Post
     {
@@ -39,16 +43,30 @@ class PostRepository implements PostRepositoryInterface
             'SELECT * FROM posts WHERE uuid = ?'
         );
         $statement->execute([$uuid]);
+
+        return $this->getPost($statement, $uuid);
+    }
+
+    /**
+     * @throws PostNotFoundException
+     * @throws InvalidArgumentException|UserNotFoundException
+     */
+    private function getPost(PDOStatement $statement, $errorMessage): Post
+    {
         $result = $statement->fetch(PDO::FETCH_ASSOC);
 
         if ($result === false) {
             throw new PostNotFoundException(
-                "Пост: $uuid не найден"
+                "Пост: $errorMessage не найден"
             );
         }
+
+        $userRepositories = new SqliteUsersRepository($this->connect);
+        $user = $userRepositories->get(new UUID($result['author_uuid']));
+
         return new Post(
             new UUID($result['uuid']),
-            new UUID($result['author_uuid']),
+            $user,
             $result['title'],
             $result['text']
         );
