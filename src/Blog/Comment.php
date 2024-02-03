@@ -5,8 +5,8 @@ class Comment
 {
     public function __construct(
         private readonly UUID $uuid,
-        private readonly UUID $postUuid,
-        private readonly UUID $userUuid,
+        private readonly Post $post,
+        private readonly User $user,
         private string        $text,
     )
     {
@@ -17,14 +17,14 @@ class Comment
         return $this->uuid;
     }
 
-    public function getUserUuid(): UUID
+    public function getUser(): User
     {
-        return $this->userUuid;
+        return $this->user;
     }
 
-    public function getPostUuid(): UUID
+    public function getPost(): Post
     {
-        return $this->postUuid;
+        return $this->post;
     }
 
     public function getText(): string
