@@ -4,32 +4,27 @@ namespace Blog\Defox\Blog;
 class Comment
 {
     public function __construct(
-        private int           $id,
-        private readonly User $userId,
-        private readonly Post $postId,
+        private readonly UUID $uuid,
+        private readonly UUID $postUuid,
+        private readonly UUID $userUuid,
         private string        $text,
     )
     {
     }
 
-    public function getId(): int
+    public function uuid(): UUID
     {
-        return $this->id;
+        return $this->uuid;
     }
 
-    public function setId(int $id): void
+    public function getUserUuid(): UUID
     {
-        $this->id = $id;
+        return $this->userUuid;
     }
 
-    public function getUserId(): int
+    public function getPostUuid(): UUID
     {
-        return $this->userId->getId();
-    }
-
-    public function getPostId(): int
-    {
-        return $this->postId->getId();
+        return $this->postUuid;
     }
 
     public function getText(): string
@@ -40,5 +35,10 @@ class Comment
     public function setText ($text): void
     {
         $this->text = $text;
+    }
+
+    public function __toString(): string
+    {
+        return "Комментарий с текстом: $this->text";
     }
 }
