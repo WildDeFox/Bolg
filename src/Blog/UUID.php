@@ -4,7 +4,7 @@ namespace Blog\Defox\Blog;
 
 use Blog\Defox\Blog\Exceptions\InvalidArgumentException;
 
-readonly class UUID
+class UUID
 {
     /**
      * @throws InvalidArgumentException

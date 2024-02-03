@@ -1,6 +1,6 @@
 <?php
 
-namespace Blog\Defox\Blog\Repositories;
+namespace Blog\Defox\Blog\Repositories\UserRepository;
 
 use Blog\Defox\Blog\Exceptions\InvalidArgumentException;
 use Blog\Defox\Blog\Exceptions\UserNotFoundException;
