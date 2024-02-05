@@ -16,7 +16,7 @@ $userRepository = new SqliteUsersRepository($connection);
 $postRepository = new PostRepository($connection);
 $commentRepository = new CommentRepository($connection);
 $faker = Faker\Factory::create('ru_RU');
-
+    $faker->realText();
 
 $post = $postRepository->get(new UUID('177358a0-8452-439c-851b-66b3f94c990f'));
 $comment = $commentRepository->get(new UUID('59d0212f-bd4a-430d-943d-59b829068b32'));
