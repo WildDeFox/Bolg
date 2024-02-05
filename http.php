@@ -1,11 +1,16 @@
 <?php
 
 use Blog\Defox\Http\Request;
+use Blog\Defox\Http\SuccessfulResponse;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
 $request = new Request($_GET, $_SERVER);
+
+$response = new SuccessfulResponse([
+    'message' => 'Hello from PHP'
+]);
 try {
-    $path = $request->query('cookie');
-} catch (Exception $e) {
+    $response->send();
+} catch (Exception) {
 }
