@@ -1,7 +1,11 @@
 <?php
 
 use Blog\Defox\Blog\Exceptions\AppException;
+use Blog\Defox\Blog\Repositories\PostRepository\PostRepository;
 use Blog\Defox\Blog\Repositories\UserRepository\SqliteUsersRepository;
+use Blog\Defox\Http\Actions\Posts\CreatePosts;
+use Blog\Defox\Http\Actions\Posts\DeletePosts;
+use Blog\Defox\Http\Actions\Posts\FindByUuid;
 use Blog\Defox\Http\Actions\Users\CreateUser;
 use Blog\Defox\Http\Actions\Users\FindByUsername;
 use Blog\Defox\Http\ErrorResponse;
@@ -18,11 +22,22 @@ $routes = [
     'GET' => [
         '/users/show' => new FindByUsername(
             new SqliteUsersRepository($connect)
+        ),
+        '/posts/show' => new FindByUuid(
+            new PostRepository($connect)
         )
     ],
     'POST' => [
         '/users/create' => new CreateUser(
             new SqliteUsersRepository($connect)
+        ),
+        '/posts/create' => new CreatePosts(
+            new PostRepository($connect), $connect
+        )
+    ],
+    'DELETE' => [
+        '/posts/delete' => new DeletePosts(
+            new PostRepository($connect)
         )
     ]
 ];

@@ -26,7 +26,7 @@ readonly class Request
         // В суперглобальном массиве $_SERVER
         // значение URI хранится под ключом REQUEST_URI
         if (!array_key_exists('REQUEST_URI', $this->server)) {
-            // Если мы не можем получить URI - бросам исключение
+            // Если мы не можем получить URI - бросаем исключение
             throw new HttpException('Cannot get path from the request');
         }
         // Используем встроенную в PHP функцию parse_url
@@ -38,8 +38,8 @@ readonly class Request
         return $components['path'];
     }
 
-    // Метод для получениия значения
-    // определённого параметра сттроки запроса
+    // Метод для получения значения
+    // определённого параметра строки запроса
     // Например, для http://example.com/some/page?x=1&y=acb
     // значением параметра x будет строка '1'
     /**

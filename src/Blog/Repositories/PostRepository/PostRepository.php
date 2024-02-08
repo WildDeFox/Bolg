@@ -33,6 +33,14 @@ readonly class PostRepository implements PostRepositoryInterface
         ]);
     }
 
+    public function delete(UUID $uuid): void
+    {
+        $statement = $this->connect->prepare(
+            'DELETE FROM posts WHERE uuid = ?'
+        );
+        $statement->execute([$uuid]);
+    }
+
     /**
      * @throws PostNotFoundException|InvalidArgumentException
      * @throws UserNotFoundException
