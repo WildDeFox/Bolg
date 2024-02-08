@@ -31,11 +31,11 @@ readonly class FindByUsername implements ActionInterface
         } catch (HttpException $e) {
             // Если в запросе нет параметра username -
             // возвращаем неуспешный ответ,
-            // сообщени об ошибки береём из описания исключения
+            // сообщение об ошибки берём из описания исключения
             return new ErrorResponse($e->getMessage());
         }
         try {
-            // Пытаемся найти пользователя в репозитрии
+            // Пытаемся найти пользователя в репозитории
             $user = $this->userRepository->getByUsername($username);
         } catch (UserNotFoundException $e) {
             // Если пользователь не найден -

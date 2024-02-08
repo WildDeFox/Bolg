@@ -3,12 +3,14 @@
 namespace Blog\Defox\Http;
 
 use Blog\Defox\Blog\Exceptions\HttpException;
+use JsonException;
 
 readonly class Request
 {
     public function __construct(
         private array $get, // $_GET
-        private array $server // $_SERVER
+        private array $server, // $_SERVER
+        private string $body,
     )
     {
     }
@@ -76,6 +78,63 @@ readonly class Request
             throw new HttpException("Empty header in the request: $header");
         }
         return $value;
+    }
+
+    // Метод для получения массива,
+    // сформированного из json-форматированного
+    // тела запроса
+    /**
+     * @throws HttpException
+     */
+    public function jsonBody(): array
+    {
+        try {
+            // Пытаемся декодировать json
+            $data = json_decode(
+                $this->body,
+                // Декодируем в ассоциативный массив
+            associative: true,
+                // Бросаем исключение при ошибки
+            flags: JSON_THROW_ON_ERROR
+            );
+        } catch (JsonException) {
+            throw new HttpException("Cannot decode jsom body");
+        }
+        if (!is_array($data)) {
+            throw new HttpException("Not an array/object in json body");
+        }
+        return $data;
+    }
+
+    // Метод для получения отдельного поля
+    // из json-форматированного тела запроса
+    /**
+     * @throws HttpException
+     */
+    public function jsonBodyField(string $field): mixed
+    {
+        $data = $this->jsonBody();
+        if (!array_key_exists($field, $data)) {
+            throw new HttpException("No such field: $field");
+        }
+        if (empty($data[$field])) {
+            throw new HttpException("Empty field: $field");
+        }
+        return $data[$field];
+    }
+
+    /**
+     * @throws HttpException
+     */
+    public function method(): string
+    {
+        // В суперглобальном массиве $_SERVER
+        // HTTP-метод хранится под ключом REQUEST_METHOD
+        if (!array_key_exists('REQUEST_METHOD', $this->server)) {
+            // Если мы не можем получить метод - бросаем исключение
+            throw new HttpException('Cannot get method from the request');
+        }
+        return $this->server['REQUEST_METHOD'];
     }
 
 }
