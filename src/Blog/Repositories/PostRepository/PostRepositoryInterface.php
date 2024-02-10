@@ -7,6 +7,6 @@ use Blog\Defox\Blog\UUID;
 
 interface PostRepositoryInterface
 {
-//    public function get(UUID $uuid): Post;
+    public function get(UUID $uuid): Post;
     public function save(Post $post): void;
 }

@@ -8,6 +8,6 @@ use Blog\Defox\Blog\UUID;
 
 interface CommentRepositoryInterface
 {
-    public function get(UUID $uuid): Post;
+    public function get(UUID $uuid): Comment;
     public function save(Comment $comment): void;
 }

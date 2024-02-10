@@ -7,14 +7,13 @@ use Blog\Defox\Blog\Exceptions\CommentNotFoundException;
 use Blog\Defox\Blog\Exceptions\InvalidArgumentException;
 use Blog\Defox\Blog\Exceptions\PostNotFoundException;
 use Blog\Defox\Blog\Exceptions\UserNotFoundException;
-use Blog\Defox\Blog\Post;
 use Blog\Defox\Blog\Repositories\PostRepository\PostRepository;
 use Blog\Defox\Blog\Repositories\UserRepository\SqliteUsersRepository;
 use Blog\Defox\Blog\UUID;
 use PDO;
 use PDOStatement;
 
-readonly class CommentRepository
+readonly class CommentRepository implements CommentRepositoryInterface
 {
     public function __construct(
         private PDO $connect
@@ -38,7 +37,6 @@ readonly class CommentRepository
 
     /**
      * @throws CommentNotFoundException
-     * @throws InvalidArgumentException
      */
     public function get(UUID $uuid): Comment
     {

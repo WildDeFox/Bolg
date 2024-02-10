@@ -1,11 +1,14 @@
 <?php
 
 use Blog\Defox\Blog\Exceptions\AppException;
+use Blog\Defox\Blog\Repositories\CommentRepository\CommentRepository;
 use Blog\Defox\Blog\Repositories\PostRepository\PostRepository;
 use Blog\Defox\Blog\Repositories\UserRepository\SqliteUsersRepository;
+use Blog\Defox\Http\Actions\Comments\CreateComments;
 use Blog\Defox\Http\Actions\Posts\CreatePosts;
 use Blog\Defox\Http\Actions\Posts\DeletePosts;
 use Blog\Defox\Http\Actions\Posts\FindByUuid;
+use Blog\Defox\Http\Actions\Comments\FindCommentByUuid;
 use Blog\Defox\Http\Actions\Users\CreateUser;
 use Blog\Defox\Http\Actions\Users\FindByUsername;
 use Blog\Defox\Http\ErrorResponse;
@@ -25,6 +28,9 @@ $routes = [
         ),
         '/posts/show' => new FindByUuid(
             new PostRepository($connect)
+        ),
+        '/comments/show' => new FindCommentByUuid(
+            new CommentRepository($connect)
         )
     ],
     'POST' => [
@@ -33,6 +39,11 @@ $routes = [
         ),
         '/posts/create' => new CreatePosts(
             new PostRepository($connect), $connect
+        ),
+        '/comments/create' => new CreateComments(
+            new SqliteUsersRepository($connect),
+            new PostRepository($connect),
+            new CommentRepository($connect)
         )
     ],
     'DELETE' => [
