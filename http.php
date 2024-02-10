@@ -13,80 +13,66 @@ use Blog\Defox\Http\Actions\Users\CreateUser;
 use Blog\Defox\Http\Actions\Users\FindByUsername;
 use Blog\Defox\Http\ErrorResponse;
 use Blog\Defox\Http\Request;
-use Blog\Defox\Http\SuccessfulResponse;
 
-require_once __DIR__ . '/vendor/autoload.php';
+$container = require __DIR__ . '/bootstrap.php';
 
-$connect = new PDO('sqlite:' . __DIR__ . '/blog.sqlite');
+$request = new Request(
+    $_GET,
+    $_SERVER,
+    file_get_contents('php://input'),
+);
 
-$request = new Request($_GET, $_SERVER, file_get_contents('php://input'),);
+// Получаем путь
+try {
+    $path = $request->path();
+} catch (HttpException) {
+    (new ErrorResponse)->send();
+    return;
+}
+
+// Получаем метод
+try {
+    $method = $request->method();
+} catch (HttpException) {
+    (new ErrorResponse)->send();
+    return;
+}
 
 $routes = [
     'GET' => [
-        '/users/show' => new FindByUsername(
-            new SqliteUsersRepository($connect)
-        ),
-        '/posts/show' => new FindByUuid(
-            new PostRepository($connect)
-        ),
-        '/comments/show' => new FindCommentByUuid(
-            new CommentRepository($connect)
-        )
+        '/users/show' => FindByUsername::class,
+        '/posts/show' => FindByUuid::class,
+        'comments/show' => FindCommentByUuid::class,
     ],
     'POST' => [
-        '/users/create' => new CreateUser(
-            new SqliteUsersRepository($connect)
-        ),
-        '/posts/create' => new CreatePosts(
-            new PostRepository($connect), $connect
-        ),
-        '/comments/create' => new CreateComments(
-            new SqliteUsersRepository($connect),
-            new PostRepository($connect),
-            new CommentRepository($connect)
-        )
+        '/users/create' => CreateUser::class,
+        '/posts/create' => CreatePosts::class,
+        '/comments/create' => CreateComments::class,
     ],
     'DELETE' => [
-        '/posts/delete' => new DeletePosts(
-            new PostRepository($connect)
-        )
+        '/posts/delete' => DeletePosts::class,
     ]
 ];
 
-try {
-    // Пытаемся получить путь из запроса
-    $path = $request->path();
-} catch (HttpException) {
-    // Отправляем неудачный ответ,
-    // если по какой-то причине не можем получить путь
-    (new ErrorResponse)->send();
-    return;
-}
 
-try {
-    // Пытаемся получить HTTP-метод запроса
-    $method = $request->method();
-} catch (HttpException) {
-    // Возвращаем неудачный ответ,
-    // если по какой-то причине
-    // не можем получить метод
-    (new ErrorResponse)->send();
-    return;
-}
 
 // Если у нас нет маршрутов для метода запроса -
 // возвращаем неуспешный ответ
 if (!array_key_exists($method, $routes)) {
-    (new ErrorResponse('Not found'))->send();
+    (new ErrorResponse("Routes not found: $method $path"))->send();
     return;
 }
 // Ищем маршрут среди маршрутов для этого метода
 if (!array_key_exists($path, $routes[$method])) {
-    (new ErrorResponse('Not found'))->send();
+    (new ErrorResponse("Route not found: $method, $path"))->send();
     return;
 }
-// Выбираем действие по методу и пути
-$action = $routes[$method][$path];
+
+// Получаем имя класса действия для маршрута
+$actionClassName = $routes[$method][$path];
+
+$action = $container->get($actionClassName);
+
 try {
     $response = $action->handle($request);
 } catch (AppException $e) {
