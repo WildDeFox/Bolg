@@ -1,6 +1,8 @@
 <?php
 
 use Blog\Defox\Blog\Container\DIContainer;
+use Blog\Defox\Blog\Repositories\LikePostRepository\LikePostRepository;
+use Blog\Defox\Blog\Repositories\LikePostRepository\LikePostRepositoryInterface;
 use Blog\Defox\Blog\Repositories\PostRepository\PostRepository;
 use Blog\Defox\Blog\Repositories\PostRepository\PostRepositoryInterface;
 use Blog\Defox\Blog\Repositories\UserRepository\SqliteUsersRepository;
@@ -23,6 +25,11 @@ $container->bind(
 $container->bind(
     UserRepositoryInterface::class,
     SqliteUsersRepository::class
+);
+
+$container->bind(
+    LikePostRepositoryInterface::class,
+    LikePostRepository::class
 );
 
 return $container;

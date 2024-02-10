@@ -9,6 +9,7 @@ use Blog\Defox\Http\Actions\Posts\CreatePosts;
 use Blog\Defox\Http\Actions\Posts\DeletePosts;
 use Blog\Defox\Http\Actions\Posts\FindByUuid;
 use Blog\Defox\Http\Actions\Comments\FindCommentByUuid;
+use Blog\Defox\Http\Actions\PostsLike\CreatePostLike;
 use Blog\Defox\Http\Actions\Users\CreateUser;
 use Blog\Defox\Http\Actions\Users\FindByUsername;
 use Blog\Defox\Http\ErrorResponse;
@@ -42,12 +43,13 @@ $routes = [
     'GET' => [
         '/users/show' => FindByUsername::class,
         '/posts/show' => FindByUuid::class,
-        'comments/show' => FindCommentByUuid::class,
+        '/comments/show' => FindCommentByUuid::class,
     ],
     'POST' => [
         '/users/create' => CreateUser::class,
         '/posts/create' => CreatePosts::class,
         '/comments/create' => CreateComments::class,
+        '/posts/like/create' => CreatePostLike::class,
     ],
     'DELETE' => [
         '/posts/delete' => DeletePosts::class,
