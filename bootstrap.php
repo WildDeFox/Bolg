@@ -11,17 +11,21 @@ use Blog\Defox\Blog\Repositories\PostRepository\PostRepository;
 use Blog\Defox\Blog\Repositories\PostRepository\PostRepositoryInterface;
 use Blog\Defox\Blog\Repositories\UserRepository\SqliteUsersRepository;
 use Blog\Defox\Blog\Repositories\UserRepository\UserRepositoryInterface;
+use Dotenv\Dotenv;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+// Загружаем переменные окружения из файла .env
+Dotenv::createImmutable(__DIR__)->safeLoad();
+
 $container = new DIContainer();
 
 $container->bind(
     PDO::class,
-    new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
+    new PDO('sqlite:' . __DIR__ . '/' . $_ENV['SQLITE_DB_PATH'])
 );
 
 $container->bind(
