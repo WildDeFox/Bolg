@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/Blog/Repositories/CommentRepository/CommentRepository.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/Blog/Repositories/LikeCommentRepository/LikeCommentRepository.php" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/Blog/Repositories/LikePostRepository/LikePostRepository.php" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/Blog/Repositories/PostRepository/PostRepository.php" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/Blog/Repositories/UserRepository/SqliteUsersRepository.php" dialect="GenericSQL" />

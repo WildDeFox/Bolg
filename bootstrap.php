@@ -1,6 +1,10 @@
 <?php
 
 use Blog\Defox\Blog\Container\DIContainer;
+use Blog\Defox\Blog\Repositories\CommentRepository\CommentRepository;
+use Blog\Defox\Blog\Repositories\CommentRepository\CommentRepositoryInterface;
+use Blog\Defox\Blog\Repositories\LikeCommentRepository\LikeCommentRepository;
+use Blog\Defox\Blog\Repositories\LikeCommentRepository\LikeCommentRepositoryInterface;
 use Blog\Defox\Blog\Repositories\LikePostRepository\LikePostRepository;
 use Blog\Defox\Blog\Repositories\LikePostRepository\LikePostRepositoryInterface;
 use Blog\Defox\Blog\Repositories\PostRepository\PostRepository;
@@ -28,8 +32,18 @@ $container->bind(
 );
 
 $container->bind(
+    CommentRepositoryInterface::class,
+    CommentRepository::class
+);
+
+$container->bind(
     LikePostRepositoryInterface::class,
     LikePostRepository::class
+);
+
+$container->bind(
+    LikeCommentRepositoryInterface::class,
+    LikeCommentRepository::class
 );
 
 return $container;

@@ -47,11 +47,11 @@ readonly class LikePostRepository implements LikePostRepositoryInterface
     public function getByPostUuid(UUID $postUuid): array
     {
         $statement = $this->connection->prepare(
-            'SELECT * FROM posts_lik WHERE post_uuid = :uuid'
+            'SELECT * FROM posts_like WHERE post_uuid = :uuid'
         );
 
         $statement->execute([
-            'uuid' => $postUuid
+            ':uuid' => $postUuid
         ]);
 
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);

@@ -5,6 +5,7 @@ use Blog\Defox\Blog\Repositories\CommentRepository\CommentRepository;
 use Blog\Defox\Blog\Repositories\PostRepository\PostRepository;
 use Blog\Defox\Blog\Repositories\UserRepository\SqliteUsersRepository;
 use Blog\Defox\Http\Actions\Comments\CreateComments;
+use Blog\Defox\Http\Actions\CommentsLike\CreateCommentLike;
 use Blog\Defox\Http\Actions\Posts\CreatePosts;
 use Blog\Defox\Http\Actions\Posts\DeletePosts;
 use Blog\Defox\Http\Actions\Posts\FindByUuid;
@@ -50,6 +51,7 @@ $routes = [
         '/posts/create' => CreatePosts::class,
         '/comments/create' => CreateComments::class,
         '/posts/like/create' => CreatePostLike::class,
+        '/comment/like/create' => CreateCommentLike::class
     ],
     'DELETE' => [
         '/posts/delete' => DeletePosts::class,
