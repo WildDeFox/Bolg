@@ -21,14 +21,15 @@ readonly class SqliteUsersRepository implements UserRepositoryInterface
     public function save(User $user): void
     {
         $statement = $this->connection->prepare(
-            'INSERT INTO users (first_name, last_name, uuid, username)
-                    VALUES (:first_name, :last_name, :uuid, :username)'
+            'INSERT INTO users (first_name, last_name, uuid, username, password)
+                    VALUES (:first_name, :last_name, :uuid, :username, :password)'
         );
         $statement->execute([
             ':first_name' => $user->name()->getFirstName(),
             ':last_name' => $user->name()->getLastName(),
             ':uuid' => $user->uuid(),
             ':username' => $user->getUsername(),
+            ':password' => $user->hashedPassword(),
         ]);
     }
 
@@ -78,7 +79,8 @@ readonly class SqliteUsersRepository implements UserRepositoryInterface
         return new User(
             new UUID($result['uuid']),
             new Name($result['first_name'], $result['last_name']),
-            $result['username']
+            $result['username'],
+            $result['password'],
         );
     }
 }

@@ -4,6 +4,7 @@ use Blog\Defox\Blog\Exceptions\AppException;
 use Blog\Defox\Blog\Repositories\CommentRepository\CommentRepository;
 use Blog\Defox\Blog\Repositories\PostRepository\PostRepository;
 use Blog\Defox\Blog\Repositories\UserRepository\SqliteUsersRepository;
+use Blog\Defox\Http\Actions\Auth\Login;
 use Blog\Defox\Http\Actions\Comments\CreateComments;
 use Blog\Defox\Http\Actions\CommentsLike\CreateCommentLike;
 use Blog\Defox\Http\Actions\Posts\CreatePosts;
@@ -52,6 +53,7 @@ $routes = [
         '/comments/show' => FindCommentByUuid::class,
     ],
     'POST' => [
+        '/login' => Login::class,
         '/users/create' => CreateUser::class,
         '/posts/create' => CreatePosts::class,
         '/comments/create' => CreateComments::class,

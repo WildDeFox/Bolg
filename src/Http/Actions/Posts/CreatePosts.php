@@ -8,6 +8,9 @@ use Blog\Defox\Blog\Repositories\PostRepository\PostRepositoryInterface;
 use Blog\Defox\Blog\Repositories\UserRepository\SqliteUsersRepository;
 use Blog\Defox\Blog\UUID;
 use Blog\Defox\Http\Actions\ActionInterface;
+use Blog\Defox\Http\Auth\AuthenticationInterface;
+use Blog\Defox\Http\Auth\IdentificationInterface;
+use Blog\Defox\Http\Auth\TokenAuthenticationInterface;
 use Blog\Defox\Http\ErrorResponse;
 use Blog\Defox\Http\Request;
 use Blog\Defox\Http\Response;
@@ -15,26 +18,26 @@ use Blog\Defox\Http\SuccessfulResponse;
 use PDO;
 use Psr\Log\LoggerInterface;
 
-class CreatePosts implements ActionInterface
+readonly class CreatePosts implements ActionInterface
 {
     public function __construct(
+        private TokenAuthenticationInterface $authentication,
         private PostRepositoryInterface $postRepository,
-        private PDO $connection,
-        private LoggerInterface $logger,
+        private LoggerInterface         $logger,
     )
     {
     }
 
     public function handle(Request $request): Response
     {
+        $author = $this->authentication->user($request);
+
         try {
             $newPostUuid = UUID::random();
-            $userRepository = new SqliteUsersRepository($this->connection);
-            $user = $userRepository->get(new UUID($request->jsonBodyField('author_uuid')));
 
             $post = new Post(
                 $newPostUuid,
-                $user,
+                $author,
                 $request->jsonBodyField('title'),
                 $request->jsonBodyField('text'),
             );
