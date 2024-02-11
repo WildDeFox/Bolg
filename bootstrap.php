@@ -11,6 +11,9 @@ use Blog\Defox\Blog\Repositories\PostRepository\PostRepository;
 use Blog\Defox\Blog\Repositories\PostRepository\PostRepositoryInterface;
 use Blog\Defox\Blog\Repositories\UserRepository\SqliteUsersRepository;
 use Blog\Defox\Blog\Repositories\UserRepository\UserRepositoryInterface;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -19,6 +22,19 @@ $container = new DIContainer();
 $container->bind(
     PDO::class,
     new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
+);
+
+$container->bind(
+    LoggerInterface::class,
+    (new Logger('blog'))
+    ->pushHandler(new StreamHandler(
+        __DIR__ . '/logs/blog.log'
+    ))
+    ->pushHandler(new StreamHandler(
+        __DIR__ . '/logs/blog.error.log',
+        level: Logger::ERROR,
+        bubble: false,
+    ))
 );
 
 $container->bind(

@@ -13,12 +13,14 @@ use Blog\Defox\Http\Request;
 use Blog\Defox\Http\Response;
 use Blog\Defox\Http\SuccessfulResponse;
 use PDO;
+use Psr\Log\LoggerInterface;
 
 class CreatePosts implements ActionInterface
 {
     public function __construct(
         private PostRepositoryInterface $postRepository,
         private PDO $connection,
+        private LoggerInterface $logger,
     )
     {
     }
@@ -40,6 +42,7 @@ class CreatePosts implements ActionInterface
             return new ErrorResponse($e->getMessage());
         }
         $this->postRepository->save($post);
+        $this->logger->info("Post created: $newPostUuid");
         return new SuccessfulResponse([
             'uuid' => $newPostUuid,
         ]);

@@ -10,13 +10,15 @@ use Blog\Defox\Blog\Repositories\UserRepository\UserRepositoryInterface;
 use Blog\Defox\Blog\User;
 use Blog\Defox\Blog\UUID;
 use Blog\Defox\Person\Name;
+use Psr\Log\LoggerInterface;
 
 class CreateUserCommand
 {
 // Команда зависит от контракта репозитория пользователей,
 // а не от конкретной реализации
     public function __construct(
-        private UserRepositoryInterface $usersRepository
+        private UserRepositoryInterface $usersRepository,
+        private LoggerInterface $logger,
     )
     {
     }
@@ -29,6 +31,8 @@ class CreateUserCommand
      */
     public function handle(Arguments $arguments): void
     {
+        $this->logger->info("Create user command started");
+
         $username = $arguments->get('username');
 
         // Проверяем, существует ли пользователь в репозитории
@@ -44,6 +48,8 @@ class CreateUserCommand
                 $arguments->get('last_name')),
             $username,
         ));
+
+        $this->logger->info("User created: $username");
     }
 
     private function userExists(string $username): bool

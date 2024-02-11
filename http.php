@@ -15,8 +15,11 @@ use Blog\Defox\Http\Actions\Users\CreateUser;
 use Blog\Defox\Http\Actions\Users\FindByUsername;
 use Blog\Defox\Http\ErrorResponse;
 use Blog\Defox\Http\Request;
+use Psr\Log\LoggerInterface;
 
 $container = require __DIR__ . '/bootstrap.php';
+
+$logger = $container->get(LoggerInterface::class);
 
 $request = new Request(
     $_GET,
@@ -27,7 +30,8 @@ $request = new Request(
 // Получаем путь
 try {
     $path = $request->path();
-} catch (HttpException) {
+} catch (HttpException $e) {
+    $logger->warning($e->getMessage());
     (new ErrorResponse)->send();
     return;
 }
@@ -35,7 +39,8 @@ try {
 // Получаем метод
 try {
     $method = $request->method();
-} catch (HttpException) {
+} catch (HttpException $e) {
+    $logger->warning($e->getMessage());
     (new ErrorResponse)->send();
     return;
 }
@@ -61,14 +66,12 @@ $routes = [
 
 
 // Если у нас нет маршрутов для метода запроса -
-// возвращаем неуспешный ответ
-if (!array_key_exists($method, $routes)) {
-    (new ErrorResponse("Routes not found: $method $path"))->send();
-    return;
-}
+// возвращаем неуспешный ответ.
 // Ищем маршрут среди маршрутов для этого метода
-if (!array_key_exists($path, $routes[$method])) {
-    (new ErrorResponse("Route not found: $method, $path"))->send();
+if (!array_key_exists($method, $routes) || !array_key_exists($path, $routes[$method])) {
+    $message = "Route not found: $method $path";
+    $logger->notice($message);
+    (new ErrorResponse($message))->send();
     return;
 }
 
@@ -80,6 +83,7 @@ $action = $container->get($actionClassName);
 try {
     $response = $action->handle($request);
 } catch (AppException $e) {
+    $logger->error($e->getMessage(), ['exception' => $e]);
     (new ErrorResponse($e->getMessage()))->send();
 }
 $response->send();
